@@ -1,7 +1,8 @@
-export default function SearchPage({
+export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: { q?: string };
+  searchParams: Promise<{ q?: string }>;
 }) {
-  return <div>Search: {searchParams.q}</div>;
+  const { q } = await searchParams;
+  return <div>Search: {q}</div>;
 }

@@ -1,3 +1,5 @@
+import SearchBar from "./searchbar";
+
 export default function SearchLayout({
   children,
 }: {
@@ -5,7 +7,7 @@ export default function SearchLayout({
 }) {
   return (
     <div>
-      <div>Searchbar Layout</div>
+      <SearchBar />
       {children}
     </div>
   );
