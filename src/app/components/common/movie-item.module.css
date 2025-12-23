@@ -1,0 +1,8 @@
+.book_item_container {
+  /* box-sizing: border-box; */
+}
+
+.book_item_container > img{
+  display: block;
+  max-width: 100%;
+}

@@ -1,0 +1,15 @@
+.recommend_movie_container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.recommend_movie_list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+/* .recommend_movie_list > div {
+  width: 33.3%;
+} */
