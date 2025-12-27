@@ -1,6 +1,15 @@
-import movie from "@/app/dummy.json";
-// import { MovieData } from "@/app/types";
 import style from "./movie-detail.module.css";
+
+const getMmovie = async (movieId: string) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/movie/${movieId}`,
+    {
+      cache: "force-cache",
+    }
+  );
+  const movieData = await response.json();
+  return movieData;
+};
 
 export default async function MoviePage({
   params,
@@ -9,10 +18,9 @@ export default async function MoviePage({
 }) {
   const { id: movieId } = await params;
 
-  const movieIndex = movie.findIndex((item) => item.id === Number(movieId));
-  const movieData = movie[movieIndex];
+  const movieData = await getMmovie(`${movieId}`);
 
-  if (movieIndex !== -1) {
+  if (movieData) {
     return (
       <div className={style.container}>
         <div
