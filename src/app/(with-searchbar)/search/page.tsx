@@ -2,8 +2,13 @@ import { MovieData } from "@/app/types";
 import MovieItem from "@/app/components/common/movie-item";
 import style from "./search.module.css";
 
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 const getSearchedMovies = async (query: string): Promise<MovieData[]> => {
   try {
+    await delay(5000);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/movie/search?q=${query}`,
       {
