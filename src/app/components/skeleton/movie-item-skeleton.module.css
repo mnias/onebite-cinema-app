@@ -1,0 +1,7 @@
+.container {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: rgba(220, 220, 220, 0.7);
+  border-radius: 4px;
+}

@@ -1,12 +1,16 @@
 import { MovieData } from "@/app/types";
 import style from "./all-movie.module.css";
 import MovieItem from "../common/movie-item";
+import { delay } from "@/lib/delay";
 
-export default function AllMovie({ allMovie }: { allMovie: MovieData[] }) {
+export default async function AllMovie() {
+  await delay(2000);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movie`);
+  const allMovie: MovieData[] = await response.json();
+
   return (
     <section>
       <div className={style.all_movie_container}>
-        <h3>등록된 모든 영화</h3>
         <div className={style.all_movie_list}>
           {allMovie.map((movie) => (
             <MovieItem key={movie.id} {...movie} />

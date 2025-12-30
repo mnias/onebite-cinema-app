@@ -1,16 +1,23 @@
 import style from "./recommend-movie.module.css";
 import MovieItem from "../common/movie-item";
 import { MovieData } from "@/app/types";
+import { delay } from "@/lib/delay";
 
-export default function RecommendMovie({
-  recoMovie,
-}: {
-  recoMovie: MovieData[];
-}) {
+export default async function RecommendMovie() {
+  await delay(2000);
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/movie/random`,
+    {
+      next: {
+        revalidate: 60,
+      },
+    }
+  );
+  const recoMovie: MovieData[] = await response.json();
+
   return (
     <section>
       <div className={style.recommend_movie_container}>
-        <h3>지금 가장 추천하는 영화</h3>
         <div className={style.recommend_movie_list}>
           {recoMovie.slice(0, 3).map((movie) => (
             <MovieItem key={movie.id} {...movie} />
