@@ -1,6 +1,8 @@
-import { MovieData } from "@/app/types";
+import { MovieData, ReviewData } from "@/app/types";
 import style from "./movie-detail.module.css";
 import { notFound } from "next/navigation";
+import ReviewItem from "@/app/components/review/review-item";
+import ReviewEditor from "@/app/components/review/review-editor";
 
 export function generateStaticParams() {
   return [
@@ -45,12 +47,7 @@ const getMovie = async (movieId: string): Promise<MovieData> => {
   }
 };
 
-export default async function MoviePage({
-  params,
-}: {
-  params: Promise<{ id?: string }>;
-}) {
-  const { id: movieId } = await params;
+async function MovieDetail({ movieId }: { movieId: string }) {
   let movieData: MovieData | null = null;
 
   try {
@@ -61,12 +58,16 @@ export default async function MoviePage({
   }
 
   return (
-    <div className={style.container}>
+    <section>
       <div
         className={style.cover_img_container}
         style={{ backgroundImage: `url('${movieData.posterImgUrl}')` }}
       >
-        <img src={movieData.posterImgUrl} />
+        <img
+          src={movieData.posterImgUrl}
+          alt={movieData.title}
+          loading="lazy"
+        />
       </div>
       <div className={style.title}>{movieData.title}</div>
       <div>
@@ -76,6 +77,43 @@ export default async function MoviePage({
       <div>{movieData.company}</div>
       <div className={style.sub_title}>{movieData.subTitle}</div>
       <div className={style.description}>{movieData.description}</div>
+    </section>
+  );
+}
+
+
+async function ReviewList({ movieId }: { movieId: string }) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/review/movie/${movieId}`
+  );
+
+  if (!response.ok) {
+    throw new Error(`Review HTTP error! status: ${response.status}`);
+  }
+
+  const reviews: ReviewData[] = await response.json();
+
+  return (
+    <section>
+      {reviews.map((review) => {
+        return <ReviewItem key={`review-item-${review.id}`} {...review} />;
+      })}
+    </section>
+  );
+}
+
+export default async function MoviePage({
+  params,
+}: {
+  params: Promise<{ id?: string }>;
+}) {
+  const { id: movieId } = await params;
+
+  return (
+    <div className={style.container}>
+      <MovieDetail movieId={movieId ?? ""} />
+      <ReviewEditor movieId={movieId ?? ""} />
+      <ReviewList movieId={movieId ?? ""} />
     </div>
   );
 }
