@@ -1,22 +1,53 @@
 "use server";
 
-export async function createReviewAction(formData: FormData) {
+import { delay } from "@/lib/delay";
+import { revalidatePath, revalidateTag } from "next/cache";
+
+export async function createReviewAction(_: any, formData: FormData) {
   const movieId = formData.get("movieId")?.toString();
   const content = formData.get("content")?.toString();
   const author = formData.get("author")?.toString();
 
   if (!movieId || !content || !author) {
-    return;
+    return {
+      status: false,
+      error: "리뷰 내용과 작성자를 입력해주세요.",
+    };
   }
 
   try {
+    await delay(2000);
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/review`, {
       method: "POST",
       body: JSON.stringify({ movieId, content, author }),
     });
-    console.log(response.status);
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    // 1. 특정 주소의 해당하는 페이지 재검증
+    // revalidatePath(`/movie/${movieId}`);
+
+    // // 2. 특정 경로의 모든 동적 페이지 재검증
+    // revalidatePath(`/movie/[id]`, "page");
+    // console.log(response.status);
+
+    // // 3. 특정 레이아웃을 갖는 모든 페이지 재검증
+    // revalidatePath(`/(with-searchbar)`, "layout");
+
+    // // 4. 모든 데이터 재검증
+    // revalidatePath(`/`, "layout");
+
+    // 5. 태그 기준, 데이터 캐시 재검증
+    revalidateTag(`review-${movieId}`);
+    return {
+      status: true,
+      error: "",
+    };
   } catch (err) {
-    console.error(err);
-    return;
+    return {
+      status: false,
+      error: `리뷰 저장에 실패했습니다. : ${err}`,
+    };
   }
 }
