@@ -1,10 +1,8 @@
 import style from "./recommend-movie.module.css";
 import MovieItem from "../common/movie-item";
 import { MovieData } from "@/app/types";
-import { delay } from "@/lib/delay";
 
 export default async function RecommendMovie() {
-  await delay(2000);
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/movie/random`,
     {

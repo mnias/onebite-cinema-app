@@ -20,8 +20,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -30,6 +32,8 @@ export default function RootLayout({
           <Link href="/">ONEBITE CINEMA</Link>
         </header>
         <main>{children}</main>
+        {modal}
+        <div id="modal-root"></div>
       </body>
     </html>
   );

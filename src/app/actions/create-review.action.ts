@@ -1,7 +1,6 @@
 "use server";
 
-import { delay } from "@/lib/delay";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export async function createReviewAction(_: any, formData: FormData) {
   const movieId = formData.get("movieId")?.toString();
@@ -16,7 +15,6 @@ export async function createReviewAction(_: any, formData: FormData) {
   }
 
   try {
-    await delay(2000);
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/review`, {
       method: "POST",
       body: JSON.stringify({ movieId, content, author }),

@@ -2,7 +2,6 @@ import { MovieData } from "@/app/types";
 import MovieItem from "@/app/components/common/movie-item";
 import style from "./search.module.css";
 import { JSX, Suspense } from "react";
-import { delay } from "@/lib/delay";
 
 async function SearchResultMovies({
   query,
@@ -10,7 +9,6 @@ async function SearchResultMovies({
   query: string;
 }): Promise<JSX.Element> {
   // try {
-  await delay(3000);
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/movie/search?q=${query}`,
     {
